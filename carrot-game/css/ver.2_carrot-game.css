@@ -6,6 +6,7 @@ button {
 
 body {
   text-align: center;
+  background-color: black;
 }
 .game {
   display: flex;
@@ -46,6 +47,7 @@ body {
   border-radius: 20px;
   font-size: 32px;
   visibility: hidden;
+  user-select: none;
 }
 
 .game_score {
@@ -59,6 +61,7 @@ body {
   color: white;
   text-align: center;
   visibility: hidden;
+  user-select: none;
 }
 
 .game_field {
@@ -97,4 +100,11 @@ body {
 .pop-up_message {
   display: block;
   font-size: 38px;
+}
+.carrot, .bug {
+  transition: transform 100ms ease-in;
+}
+.carrot:hover,
+.bug:hover {
+  transform: scale(1.1);
 }
