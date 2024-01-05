@@ -4,12 +4,21 @@ import * as sound from './ver.2_sound.js';
 
 const CARROT_SIZE = 80;
 
-export default class Field {
+export const ItemType = Object.freeze({
+  carrot: 'carrot',
+  bug: 'bug',
+});
+
+export class Field {
   constructor(carrotCount, bugCount) {
     this.carrotCount = carrotCount;
     this.bugCount = bugCount;
     this.field = document.querySelector('.game_field');
     this.fieldRect = this.field.getBoundingClientRect();
+    // 이벤트 핸들러로 사용되는 함수는 일반함수로 전달된다.
+    // 그러므로 arrow 함수, bind를 해주지 않는 이상, onClick메서드 내부에 있는
+    // this.onItemClick의 this는 'field'엘리멘트를 가리키므로, undefined가 된다.
+    // this.onItemClick의 this는 'Field'클래스를 가리키게 만들어야한다.(arrow 함수 or bind)
     this.field.addEventListener('click', this.onClick);
   }
   
@@ -18,8 +27,11 @@ export default class Field {
     this.#addItem('carrot', this.carrotCount, '../img/carrot.png');
     this.#addItem('bug', this.bugCount, '../img/bug.png');
   }
-
+  
   setClickListener(onItemClick) {
+    // gameField = new Field(carrotCount, bugCount);
+    // gameField.setClickListener(onItemClick);
+    // 주석처리 된 코드를 보면 알 수 있듯이, onItemClick의 this는 'Field'클래스를 가리킨다.
     this.onItemClick = onItemClick;
   }
 
@@ -49,9 +61,9 @@ export default class Field {
       target.remove();
       sound.playCarrot();
       // console.log(this.onItemClick);
-      this.onItemClick && this.onItemClick('carrot');
+      this.onItemClick && this.onItemClick(ItemType.carrot);
     } else if(target.matches('.bug')) {
-      this.onItemClick && this.onItemClick('bug');
+      this.onItemClick && this.onItemClick(ItemType.bug);
     }
   }
 }
